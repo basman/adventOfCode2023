@@ -2,6 +2,8 @@ package router
 
 import (
 	"fmt"
+	"sync"
+	"time"
 
 	"day5/translator"
 )
@@ -36,19 +38,35 @@ const (
 )
 
 func (r *Router) Nearest(seeds []translator.SeedRange) int {
-	minDist := -1
-	minSeed := -1
-	for _, seedRange := range seeds {
-		for seedId := seedRange.Start(); seedId < seedRange.Start()+seedRange.Length(); seedId++ {
-			dist := r.route(seedId, source, "")
-			if dist < minDist || minDist < 0 {
-				minDist = dist
-				minSeed = seedId
+	ch := make(chan int)
+	wg := sync.WaitGroup{}
+
+	for srId, seedRange := range seeds {
+		wg.Add(1)
+		go func(sr translator.SeedRange, id int) {
+			fmt.Printf("seedrange %v launched, len=%v\n", id, sr.Length())
+			start := time.Now()
+			for seedId := sr.Start(); seedId < sr.Start()+sr.Length(); seedId++ {
+				ch <- r.route(seedId, source, "")
 			}
+			fmt.Printf("seedrange %v completed in %v seconds\n", id, time.Now().Sub(start).Seconds())
+			wg.Done()
+		}(seedRange, srId)
+	}
+
+	go func() {
+		wg.Wait()
+		close(ch)
+	}()
+
+	minDist := -1
+	for dist := range ch {
+		if dist < minDist || minDist < 0 {
+			minDist = dist
 		}
 	}
 
-	if minSeed < 0 {
+	if minDist < 0 {
 		panic("could not find nearest seed id")
 	}
 
