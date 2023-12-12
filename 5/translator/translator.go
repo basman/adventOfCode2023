@@ -21,7 +21,7 @@ func (t *Translator) To() string {
 
 func (t *Translator) Map(source int) int {
 	for _, r := range t.ranges {
-		if source >= r.source && source <= r.source+r.len {
+		if source >= r.source && source < r.source+r.len {
 			return r.dest + source - r.source
 		}
 	}
