@@ -8,20 +8,9 @@ import (
 	"strings"
 )
 
-type Translator struct {
-	from, to string
-	ranges   []idRange
-}
-
-type idRange struct {
-	dest   int
-	source int
-	len    int
-}
-
-func LoadAll(input string) ([]*Translator, []int) {
+func LoadAll(input string) ([]*Translator, []SeedRange) {
 	var translators []*Translator
-	var seeds []int
+	var seeds []SeedRange
 
 	scan := bufio.NewScanner(strings.NewReader(input))
 
@@ -36,13 +25,18 @@ func LoadAll(input string) ([]*Translator, []int) {
 				panic(fmt.Sprintf("invalid seeds list '%v'", l))
 			}
 
-			seeds = make([]int, len(numsStr))
+			seeds = make([]SeedRange, len(numsStr)/2)
 
 			var err error
-			for i, nStr := range numsStr {
-				seeds[i], err = strconv.Atoi(nStr)
+			for i := 0; i < len(numsStr); i += 2 {
+				seeds[i/2].start, err = strconv.Atoi(numsStr[i])
 				if err != nil {
-					panic(fmt.Sprintf("invalid seeds number '%v'", nStr))
+					panic(fmt.Sprintf("invalid seeds id start '%v'", numsStr[i]))
+				}
+
+				seeds[i/2].len, err = strconv.Atoi(numsStr[i+1])
+				if err != nil {
+					panic(fmt.Sprintf("invalid seeds id length '%v'", numsStr[i+1]))
 				}
 			}
 		} else if strings.HasSuffix(l, "map:") {
@@ -80,22 +74,4 @@ func parseFromTo(header string) (from string, to string) {
 	}
 
 	return m[1], m[2]
-}
-
-func (t *Translator) From() string {
-	return t.from
-}
-
-func (t *Translator) To() string {
-	return t.to
-}
-
-func (t *Translator) Map(source int) int {
-	for _, r := range t.ranges {
-		if source >= r.source && source <= r.source+r.len {
-			return r.dest + source - r.source
-		}
-	}
-
-	return source // fallback to direct translation
 }

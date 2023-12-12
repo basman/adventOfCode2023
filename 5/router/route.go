@@ -35,14 +35,16 @@ const (
 	target = "location"
 )
 
-func (r *Router) Nearest(seeds []int) int {
+func (r *Router) Nearest(seeds []translator.SeedRange) int {
 	minDist := -1
 	minSeed := -1
-	for _, s := range seeds {
-		dist := r.route(s, source, "")
-		if dist < minDist || minDist < 0 {
-			minDist = dist
-			minSeed = s
+	for _, seedRange := range seeds {
+		for seedId := seedRange.Start(); seedId < seedRange.Start()+seedRange.Length(); seedId++ {
+			dist := r.route(seedId, source, "")
+			if dist < minDist || minDist < 0 {
+				minDist = dist
+				minSeed = seedId
+			}
 		}
 	}
 
