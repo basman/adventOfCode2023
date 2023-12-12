@@ -13,6 +13,16 @@ type Card struct {
 	GivenNums []int
 }
 
+type Stack []Card
+
+func (s Stack) String() string {
+	ids := make([]int, 0, len(s))
+	for _, c := range s {
+		ids = append(ids, c.Id)
+	}
+	return fmt.Sprintf("%v", ids)
+}
+
 func LoadCards(lines chan string) []Card {
 	var cards []Card
 
@@ -42,7 +52,7 @@ func ParseCard(l string) Card {
 	}
 
 	if len(m.Groups()) != 4 {
-		panic("wrong number of capture groups")
+		panic(fmt.Sprintf("wrong number of capture groups: %v, expected %v", len(m.Groups()), 4))
 	}
 
 	wins := captures2sliceInt(m.Groups()[2].Captures)
