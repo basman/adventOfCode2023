@@ -37,6 +37,10 @@ const (
 	target = "location"
 )
 
+/*
+81956385
+That's not the right answer; your answer is too high.
+*/
 func (r *Router) Nearest(seeds []translator.SeedRange) int {
 	ch := make(chan int)
 	wg := sync.WaitGroup{}
