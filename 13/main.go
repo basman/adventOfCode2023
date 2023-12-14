@@ -9,7 +9,9 @@ import (
 	"day13/reflection"
 )
 
-const filename = "input1.txt"
+// 1719: That's not the right answer; your answer is too low.
+// 2696: That's not the right answer; your answer is too low.
+const filename = "input2.txt"
 
 func readFileLines(fname string) chan string {
 	f, err := os.Open(filename)

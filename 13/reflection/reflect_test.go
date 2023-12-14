@@ -42,6 +42,14 @@ func TestFindVerticalAxis(t *testing.T) {
 		}),
 			-1,
 		},
+		{pattern.New([]string{
+			"#.#.#.##.#.",
+			"......##...",
+			".#..#....#.",
+			"#..#..##..#",
+		}),
+			6,
+		},
 	}
 
 	for i, tt := range tbl {

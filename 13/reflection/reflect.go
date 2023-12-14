@@ -5,7 +5,7 @@ import "day13/pattern"
 // FindHorizontalAxis returns the row index above the symmetrical axis or -1 if not found
 func FindHorizontalAxis(p pattern.Pattern) int {
 	height := len(p.Fields)
-	for startRow := 0; startRow <= 1; startRow++ {
+	for startRow := 0; startRow < height/2; startRow++ {
 		// make sure search range spans across even number of rows
 		lastRow := height - 1
 		if (lastRow-startRow+1)%2 != 0 {
@@ -37,7 +37,7 @@ func FindHorizontalAxis(p pattern.Pattern) int {
 // FindVerticalAxis returns the column index left of the symmetrical axis or -1 if not found
 func FindVerticalAxis(p pattern.Pattern) int {
 	width := len(p.Fields[0])
-	for startCol := 0; startCol <= 1; startCol++ {
+	for startCol := 0; startCol < width/2; startCol++ {
 		// make sure search range spans across even number of columns
 		lastCol := width - 1
 		if (lastCol-startCol+1)%2 != 0 {
