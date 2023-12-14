@@ -11,6 +11,7 @@ import (
 
 // 1719: That's not the right answer; your answer is too low.
 // 2696: That's not the right answer; your answer is too low.
+// 25409: That's not the right answer; your answer is too low.
 const filename = "input2.txt"
 
 func readFileLines(fname string) chan string {
@@ -44,18 +45,18 @@ func search(patterns []pattern.Pattern) {
 	for i, p := range patterns {
 		h := reflection.FindHorizontalAxis(p)
 		if h >= 0 {
-			fmt.Printf("Pattern %v horizontal axis between rows %v,%v", i+1, h+1, h+2)
+			fmt.Printf("Pattern %v horizontal axis between rows %v,%v\n", i+1, h+1, h+2)
 			rowSum += h + 1
 		}
 
 		v := reflection.FindVerticalAxis(p)
 		if v >= 0 {
-			fmt.Printf("Pattern %v vertical axis between columns %v,%v", i+1, v+1, v+2)
+			fmt.Printf("Pattern %v vertical axis between columns %v,%v\n", i+1, v+1, v+2)
 			colSum += v + 1
 		}
 	}
 
-	fmt.Printf("Sum of reflections (cols=%v, rows=%v): %v", colSum, rowSum, colSum+100*rowSum)
+	fmt.Printf("Sum of reflections (cols=%v, rows=%v): %v\n", colSum, rowSum, colSum+100*rowSum)
 }
 
 func main() {
